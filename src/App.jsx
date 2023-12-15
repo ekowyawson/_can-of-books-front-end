@@ -1,60 +1,36 @@
+import React from 'react';
+import Header from './components/Header';
+import Footer from './components/Footer/Footer';
+import BestBooks from './components/BestBooks/BestBooks';
+import About from './components/About';
+import Home from './components/Home/Home';
+import Container from 'react-bootstrap/Container';
 
-import React, { Component } from 'react';
-import axios from 'axios';
-import { Carousel } from 'react-bootstrap';
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route
+} from "react-router-dom";
 
-const URL = import.meta.env.VITE_LOCAL_MONGO;
-
-class App extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      books: [],
-    };
-  }
-
-  componentDidMount() {
-    this.fetchBooks();
-  }
-
-  async fetchBooks() {
-    try {
-      const response = await axios.get(`${URL}/books`);
-      
-      this.setState({ books: response.data });
-    } catch (error) {
-      console.error('Error fetching books:', error.message);
-    }
-  }
-
-  render() {
-    const { books } = this.state;
-
-    return (
-      <>
-        <h2>Best Books</h2>
-        {books.length > 0 ? (
-          <Carousel data-bs-theme="dark">
-            {books.map((book, idx) => (
-              <Carousel.Item key={idx}>
-                <img
-                className="d-block w-100"
-                src= "https://placehold.co/800x400"
-                alt={book.title}/>
-                <Carousel.Caption>
-                  <h5>{book.title}</h5>
-                  <p>{book.status}</p>
-                  <p>{book.description}</p> 
-                </Carousel.Caption>
-              </Carousel.Item>
-            ))}
-          </Carousel>
-        ) : (
-          <p>No books available.</p>
-        )}
-      </>
-    );
-  }
+function App() {
+  return (
+    <>
+      <Router>
+        {/* GLOBAL HEADER */}
+        <Header />
+        {/* ROUTES */}
+        <Container fluid className='main'>
+          <Routes>
+            <Route exact path="/" element={<Home />} />
+            <Route exact path="/books" element={<BestBooks />} />
+            <Route exact path="/about" element={<About />} />
+          </Routes>
+        </Container>
+        {/* GLOBAL FOOTER */}
+        <Footer style={{marginTop:'auto'}} />
+      </Router>
+    </>
+  );
 }
 
 export default App;
